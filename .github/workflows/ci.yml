@@ -1,1 +1,36 @@
 
+name: API CI Workflow
+on: 
+  push: 
+    branches: [ "CICDPipe" ]
+  pull_request: 
+    branches: [ "CICDPipe" ]
+
+
+jobs: 
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:  
+      matrix: 
+        node-version: [16.x, 18.x, 20.x, 22.x, 23.x] 
+
+    steps:   
+    - uses: actions/checkout@v4
+    - name: SetUp NodeJS
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Install Dependencies and Test
+      run: npm ci
+      
+
+    - name: SonarQube Scan 
+      uses: sonarsource/sonarqube-scan-action@master
+      env: 
+       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+       SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
