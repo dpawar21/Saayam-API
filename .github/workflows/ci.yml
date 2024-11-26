@@ -38,7 +38,8 @@ jobs:
        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-
+    - name: Set AWS Region
+      run: echo "AWS_DEFAULT_REGION=us-east-2" >> $GITHUB_ENV
     - name: Set AWS Credentials
       env: 
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
